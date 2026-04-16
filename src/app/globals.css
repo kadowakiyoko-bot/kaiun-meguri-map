@@ -1,26 +1,119 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-kaiun-sky: #B8E4F0;
+  --color-kaiun-sky-light: #E0F4FA;
+  --color-kaiun-pink: #F2A7C3;
+  --color-kaiun-pink-light: #FBE0EC;
+  --color-kaiun-gold: #D4AF37;
+  --color-kaiun-gold-light: #F5E6B8;
+  --color-kaiun-purple: #9B72CF;
+  --color-kaiun-purple-light: #E8D5F5;
+  --color-kaiun-purple-deep: #6B3FA0;
+  --color-kaiun-bg: #FDF8FF;
+  --color-kaiun-card: #FFFFFF;
+  --color-kaiun-text: #3D2B50;
+  --color-kaiun-text-light: #7A6B8A;
+  --font-sans: "Noto Sans JP", "Hiragino Sans", "Hiragino Kaku Gothic ProN", sans-serif;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+/* 曼荼羅風の背景パターン */
+.mandala-bg {
+  background-image:
+    radial-gradient(circle at 20% 50%, rgba(184, 228, 240, 0.15) 0%, transparent 50%),
+    radial-gradient(circle at 80% 20%, rgba(242, 167, 195, 0.12) 0%, transparent 50%),
+    radial-gradient(circle at 50% 80%, rgba(155, 114, 207, 0.10) 0%, transparent 50%),
+    radial-gradient(circle at 70% 60%, rgba(212, 175, 55, 0.08) 0%, transparent 40%);
+  background-color: var(--color-kaiun-bg);
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+/* 曼荼羅の装飾ボーダー */
+.mandala-border {
+  border-image: linear-gradient(
+    135deg,
+    var(--color-kaiun-gold) 0%,
+    var(--color-kaiun-pink) 25%,
+    var(--color-kaiun-purple) 50%,
+    var(--color-kaiun-sky) 75%,
+    var(--color-kaiun-gold) 100%
+  ) 1;
 }
+
+/* グラデーションテキスト */
+.gradient-text {
+  background: linear-gradient(
+    135deg,
+    var(--color-kaiun-purple-deep) 0%,
+    var(--color-kaiun-pink) 50%,
+    var(--color-kaiun-gold) 100%
+  );
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* カードのホバーエフェクト */
+.card-glow:hover {
+  box-shadow:
+    0 0 15px rgba(212, 175, 55, 0.2),
+    0 0 30px rgba(155, 114, 207, 0.1),
+    0 4px 15px rgba(0, 0, 0, 0.08);
+}
+
+/* フィルターボタンのアクティブ状態 */
+.filter-active {
+  background: linear-gradient(135deg, var(--color-kaiun-purple-deep), var(--color-kaiun-pink));
+  color: white;
+  box-shadow: 0 2px 10px rgba(155, 114, 207, 0.3);
+}
+
+/* Leafletのカスタムスタイル */
+.leaflet-container {
+  border-radius: 16px;
+  border: 2px solid rgba(212, 175, 55, 0.3);
+}
+
+.leaflet-popup-content-wrapper {
+  border-radius: 12px !important;
+  border: 1px solid rgba(212, 175, 55, 0.3) !important;
+  box-shadow: 0 4px 20px rgba(155, 114, 207, 0.15) !important;
+}
+
+.leaflet-popup-content {
+  margin: 12px 16px !important;
+  font-family: var(--font-sans) !important;
+}
+
+/* スクロールバーのカスタマイズ */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 6px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: var(--color-kaiun-bg);
+  border-radius: 3px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: linear-gradient(var(--color-kaiun-purple-light), var(--color-kaiun-pink-light));
+  border-radius: 3px;
+}
+
+/* 曼荼羅装飾用のアニメーション */
+@keyframes mandala-rotate {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.mandala-spin {
+  animation: mandala-rotate 60s linear infinite;
+}
+
+/* 運気バッジの色 */
+.unki-金運 { background-color: #D4AF37; color: white; }
+.unki-恋愛運 { background-color: #E91E8C; color: white; }
+.unki-仕事運 { background-color: #4A90D9; color: white; }
+.unki-健康運 { background-color: #2ECC71; color: white; }
+.unki-美容運 { background-color: #E88DD6; color: white; }
+.unki-総合運 { background-color: #9B59B6; color: white; }
+.unki-厄除け { background-color: #1ABC9C; color: white; }

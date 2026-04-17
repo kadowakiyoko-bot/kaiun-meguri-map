@@ -38,6 +38,13 @@ export const senshitsuEffects: SenshitsuEffect[] = [
       "風水・九星気学の複数文献より編集",
   },
   {
+    senshitsu: "二酸化炭素泉",
+    unki: ["健康運", "美容運"],
+    description:
+      "炭酸ガスが皮膚から浸透し血管を拡張させることで血行を促進。「心臓の湯」とも呼ばれ、体の巡りを整える力に優れています。血流改善による美肌効果も高く、健康運と美容運の両方を底上げします。",
+    source: "風水・九星気学の複数文献より編集",
+  },
+  {
     senshitsu: "放射能泉",
     unki: ["総合運", "健康運"],
     description:

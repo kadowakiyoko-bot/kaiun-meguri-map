@@ -3,9 +3,9 @@ import "./globals.css";
 import TomitabiFooter from "@/components/TomitabiFooter";
 
 export const metadata: Metadata = {
-  title: "富旅温泉 | 九星気学 × 泉質で見つける あなたの開運の湯",
+  title: "開運温泉巡りマップ | 九星気学 × 泉質で見つける あなたの開運の湯",
   description:
-    "富旅シリーズ。九星気学と温泉の泉質を掛け合わせ、あなたにぴったりの開運温泉を地図から探せるサイト。金運・恋愛運・仕事運・健康運・美容運別に全国の温泉を検索。",
+    "九星気学と温泉の泉質を掛け合わせ、あなたにぴったりの開運温泉を地図から探せるサイト。金運・恋愛運・仕事運・健康運・美容運別に全国の温泉を検索。",
 };
 
 export default function RootLayout({

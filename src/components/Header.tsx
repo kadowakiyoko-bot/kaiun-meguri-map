@@ -44,14 +44,25 @@ export default function Header() {
       </div>
 
       <div className="relative z-10">
-        <p className="text-lg font-bold gradient-text tracking-[0.3em] mb-1">
-          富旅
+        <div className="flex items-center justify-center gap-2 mb-1">
+          <svg width={20} height={20} viewBox="0 0 24 24" aria-hidden="true">
+            {[0,1,2,3,4].map((i) => {
+              const angle = (i * 72 - 90) * (Math.PI / 180);
+              const cx = 12 + 5.2 * Math.cos(angle);
+              const cy = 12 + 5.2 * Math.sin(angle);
+              return <circle key={i} cx={cx} cy={cy} r={3.5} fill="#CE3A2D" opacity={0.92} />;
+            })}
+            <circle cx={12} cy={12} r={2} fill="#C4941A" />
+          </svg>
+          <h1 className="text-3xl md:text-4xl font-bold gradient-text tracking-[0.18em]">
+            富旅温泉
+          </h1>
+        </div>
+        <p className="text-[10px] text-kaiun-text-light tracking-[0.18em] uppercase">
+          TOMITABI ONSEN
         </p>
-        <h1 className="text-3xl md:text-4xl font-bold gradient-text tracking-wider">
-          開運温泉巡りマップ
-        </h1>
         <p className="text-xs text-kaiun-text-light mt-2 tracking-wider">
-          あなたの星が導く、運気のhotspring
+          九星気学×泉質で見つける開運の湯
         </p>
       </div>
 

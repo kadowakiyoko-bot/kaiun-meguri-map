@@ -1,7 +1,6 @@
 "use client";
 
 const SISTER_APPS = [
-  { name: "富旅AIマイルコーチ", en: "TOMITABI MILE COACH", desc: "マイル・旅・開運の24時間AI相談", url: "https://tomitabi-ai-coach.vercel.app" },
   { name: "富旅暦", en: "TOMITABI KOYOMI", desc: "二十四節気七十二候で暮らす", url: "https://tomitabi-koyomi.vercel.app" },
   { name: "富旅一の宮巡り", en: "TOMITABI ICHINOMIYA MEGURI", desc: "全国一の宮102社めぐり", url: "https://kaiun-ichinomiya.vercel.app" },
 ];

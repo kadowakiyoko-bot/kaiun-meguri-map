@@ -5,6 +5,7 @@ import type { UnkiType, SenshitsuType } from "@/types";
 const unkiTypes: { type: UnkiType; emoji: string }[] = [
   { type: "金運", emoji: "💰" },
   { type: "恋愛運", emoji: "💕" },
+  { type: "子宝運", emoji: "👶" },
   { type: "仕事運", emoji: "💼" },
   { type: "健康運", emoji: "🌿" },
   { type: "美容運", emoji: "✨" },

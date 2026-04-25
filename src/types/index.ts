@@ -19,7 +19,8 @@ export type UnkiType =
   | "健康運"
   | "美容運"
   | "総合運"
-  | "厄除け";
+  | "厄除け"
+  | "子宝運";
 
 // 九星タイプ
 export type KyuseiType =

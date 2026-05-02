@@ -179,6 +179,7 @@ export default function Home() {
               onsenList={filteredOnsen}
               selectedOnsen={selectedOnsen}
               onSelectOnsen={handleSelectOnsen}
+              selectedUnki={selectedUnki}
             />
           </div>
 

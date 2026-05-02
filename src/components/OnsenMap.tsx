@@ -2,21 +2,52 @@
 
 import { useEffect, useRef } from "react";
 import L from "leaflet";
-import type { Onsen } from "@/types";
+import type { Onsen, UnkiType } from "@/types";
 import { unkiColors } from "@/data/onsen";
 
 interface OnsenMapProps {
   onsenList: Onsen[];
   selectedOnsen: Onsen | null;
   onSelectOnsen: (onsen: Onsen) => void;
+  selectedUnki: UnkiType[];
 }
 
-function createMarkerIcon(onsen: Onsen, isSelected: boolean): L.DivIcon {
-  const primaryUnki = onsen.unki[0];
-  const color = unkiColors[primaryUnki] || "#9B59B6";
-  const size = isSelected ? 44 : 34;
+/**
+ * フィルターで選んだ運気を優先表示。
+ * - フィルター無し: onsen.unki[0] を表示（従来通り）
+ * - フィルター1件 + onsenが該当: その運気を単独表示
+ * - フィルター複数 + onsenが複数該当: マッチした運気を全て表示
+ */
+function createMarkerIcon(
+  onsen: Onsen,
+  isSelected: boolean,
+  selectedUnki: UnkiType[]
+): L.DivIcon {
+  const matchingUnki =
+    selectedUnki.length > 0
+      ? onsen.unki.filter((u) => selectedUnki.includes(u))
+      : onsen.unki;
+  const displayUnki: UnkiType[] = matchingUnki.length > 0 ? matchingUnki : onsen.unki;
+
+  const isMulti = displayUnki.length >= 2;
+  const primaryColor = unkiColors[displayUnki[0]] || "#9B59B6";
+  const secondaryColor = isMulti ? unkiColors[displayUnki[1]] || primaryColor : primaryColor;
+
+  const baseSize = isMulti ? 42 : 34;
+  const size = isSelected ? baseSize + 10 : baseSize;
   const borderWidth = isSelected ? 3 : 2;
-  const fontSize = isSelected ? 11 : 9;
+  const fontSize = isMulti ? (isSelected ? 10 : 9) : isSelected ? 11 : 9;
+
+  // 表示ラベル（複数の場合は「+」で結合、最大2件）
+  const labelTexts = displayUnki.slice(0, 2).map((u) => u.replace("運", ""));
+  const labelHtml = isMulti
+    ? `<span style="display:block;line-height:1.05">${labelTexts.join("<br/>")}</span>`
+    : `<span>${labelTexts[0]}</span>`;
+
+  // 複数の場合は2色グラデーションで視覚的に区別
+  const background = isMulti
+    ? `linear-gradient(135deg, ${primaryColor} 0%, ${primaryColor} 50%, ${secondaryColor} 50%, ${secondaryColor} 100%)`
+    : `linear-gradient(135deg, ${primaryColor}, ${primaryColor}dd)`;
 
   return L.divIcon({
     className: "custom-marker",
@@ -32,9 +63,9 @@ function createMarkerIcon(onsen: Onsen, isSelected: boolean): L.DivIcon {
           height: ${size}px;
           border-radius: 50% 50% 50% 0;
           transform: rotate(-45deg);
-          background: linear-gradient(135deg, ${color}, ${color}dd);
+          background: ${background};
           border: ${borderWidth}px solid white;
-          box-shadow: 0 3px 10px rgba(0,0,0,0.3)${isSelected ? `, 0 0 20px ${color}60` : ""};
+          box-shadow: 0 3px 10px rgba(0,0,0,0.3)${isSelected ? `, 0 0 20px ${primaryColor}60` : ""};
           display: flex;
           align-items: center;
           justify-content: center;
@@ -44,9 +75,10 @@ function createMarkerIcon(onsen: Onsen, isSelected: boolean): L.DivIcon {
             font-size: ${fontSize}px;
             color: white;
             font-weight: bold;
-            text-shadow: 0 1px 2px rgba(0,0,0,0.3);
+            text-shadow: 0 1px 2px rgba(0,0,0,0.5);
             white-space: nowrap;
-          ">${onsen.unki[0].replace("運", "")}</span>
+            text-align: center;
+          ">${labelHtml}</span>
         </div>
       </div>
     `,
@@ -60,6 +92,7 @@ export default function OnsenMap({
   onsenList,
   selectedOnsen,
   onSelectOnsen,
+  selectedUnki,
 }: OnsenMapProps) {
   const mapRef = useRef<L.Map | null>(null);
   const markersRef = useRef<L.Marker[]>([]);
@@ -119,7 +152,16 @@ export default function OnsenMap({
 
     onsenList.forEach((onsen) => {
       const isSelected = selectedOnsen?.id === onsen.id;
-      const icon = createMarkerIcon(onsen, isSelected);
+      const icon = createMarkerIcon(onsen, isSelected, selectedUnki);
+
+      // ポップアップ内の運気タグも、フィルター中の運気を強調表示
+      const sortedUnki =
+        selectedUnki.length > 0
+          ? [
+              ...onsen.unki.filter((u) => selectedUnki.includes(u)),
+              ...onsen.unki.filter((u) => !selectedUnki.includes(u)),
+            ]
+          : onsen.unki;
 
       const marker = L.marker([onsen.lat, onsen.lng], { icon })
         .addTo(map)
@@ -128,7 +170,12 @@ export default function OnsenMap({
             <div style="font-size:15px;font-weight:bold;color:#6B3FA0;margin-bottom:4px">${onsen.name}</div>
             <div style="font-size:12px;color:#7A6B8A">${onsen.prefecture}</div>
             <div style="margin-top:8px;display:flex;gap:4px;flex-wrap:wrap">
-              ${onsen.unki.map((u) => `<span style="font-size:11px;padding:3px 10px;border-radius:99px;color:white;background:${unkiColors[u]};font-weight:500">${u}</span>`).join("")}
+              ${sortedUnki.map((u) => {
+                const isMatched = selectedUnki.includes(u);
+                const opacity = selectedUnki.length > 0 && !isMatched ? "opacity:0.45" : "";
+                const ring = isMatched ? "box-shadow:0 0 0 2px #fff,0 0 0 3px #C9A35A;" : "";
+                return `<span style="font-size:11px;padding:3px 10px;border-radius:99px;color:white;background:${unkiColors[u]};font-weight:500;${opacity};${ring}">${u}</span>`;
+              }).join("")}
             </div>
             <div style="margin-top:8px;display:flex;gap:4px;flex-wrap:wrap">
               ${onsen.senshitsu.map((s) => `<span style="font-size:10px;padding:2px 8px;border-radius:99px;color:#3D2B50;background:#E0F4FA;border:1px solid #B8E4F0">${s}</span>`).join("")}
@@ -144,7 +191,7 @@ export default function OnsenMap({
 
       markersRef.current.push(marker);
     });
-  }, [onsenList, selectedOnsen, onSelectOnsen]);
+  }, [onsenList, selectedOnsen, onSelectOnsen, selectedUnki]);
 
   // 選択された温泉にフォーカス
   useEffect(() => {
